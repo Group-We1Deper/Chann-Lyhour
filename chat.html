@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat & Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      background: #004b5f;
+      color: white;
+      cursor: pointer;
+      border: 1px solid #003948;
+    }
+
+    .tab.active {
+      background: #1b7b92;
+    }
+
+    .container {
+      border: 2px solid #004b5f;
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .chat-box {
+      min-height: 200px;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #f7f7f7;
+      border: 1px solid #ccc;
+    }
+
+    .msg {
+      margin: 6px 0;
+      padding: 6px 10px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .left { background: #00aabb; color: white; }
+    .right { background: #f03b7a; color: white; float: right; }
+
+    .field {
+      margin: 10px 0;
+    }
+
+    .field label {
+      font-weight: bold;
+      display: inline-block;
+      width: 140px;
+    }
+
+    .input-field {
+      width: 60%;
+    }
+
+    img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 6px 14px;
+      background-color: orange;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .clear {
+      color: red;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .logout {
+      margin-top: 15px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('chatTab')">Chat</div>
+    <div class="tab" onclick="showTab('profileTab')">Profile</div>
+  </div>
+
+  <!-- Chat Container -->
+  <div class="container" id="chatTab">
+    <h2>Chat Box</h2>
+    <div class="chat-box" id="chatBox"></div>
+
+    <div>
+      Dara: <input type="text" id="daraInput">
+      <button onclick="sendMessage('Dara')">📨</button>
+    </div>
+    <br>
+    <div>
+      Nary: <input type="text" id="naryInput">
+      <button onclick="sendMessage('Nary')">📨</button>
+    </div>
+    <div class="clear" onclick="clearChat()">Clear Chat</div>
+  </div>
+
+  <!-- Profile Container -->
+  <div class="container hidden" id="profileTab">
+    <h2>Your Profile</h2>
+    <div style="text-align:center;">
+      <img id="profilePic" src="https://via.placeholder.com/120" alt="Profile Pic">
+      <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="changePicture(event)" />
+    </div>
+
+    <div class="field"><label>Name:</label><span id="name">Keo Chanbormey</span></div>
+    <div class="field"><label>Password:</label><span id="password">abc@2022</span></div>
+    <div class="field"><label>Email:</label><span id="email">bormey@gmail.com</span></div>
+    <div class="field"><label>Place of Birth:</label><span id="birth">Siem Reap City</span></div>
+    <div class="field"><label>Current Address:</label><span id="address">Siem Reap City</span></div>
+
+    <button onclick="toggleEdit()">Edit</button>
+    <a class="logout" href="index.html">Logout</a>
+  </div>
+
+  <script>
+    let isEditing = false;
+
+    function showTab(tabId) {
+      document.getElementById('chatTab').classList.add('hidden');
+      document.getElementById('profileTab').classList.add('hidden');
+      document.getElementById(tabId).classList.remove('hidden');
+
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      const activeTab = Array.from(tabs).find(tab => tab.textContent.toLowerCase() === tabId.replace("Tab", "").toLowerCase());
+      if (activeTab) activeTab.classList.add('active');
+    }
+
+    function sendMessage(sender) {
+      const inputId = sender.toLowerCase() + 'Input';
+      const input = document.getElementById(inputId);
+      const message = input.value.trim();
+      if (message === '') return;
+
+      const chatBox = document.getElementById('chatBox');
+      const msg = document.createElement('div');
+      msg.className = 'msg ' + (sender === 'Dara' ? 'left' : 'right');
+      msg.innerText = message;
+
+      const label = document.createElement('div');
+      label.innerText = `${sender} said:`;
+      chatBox.appendChild(label);
+      chatBox.appendChild(msg);
+      chatBox.appendChild(document.createElement('div')); // spacer
+
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function clearChat() {
+      document.getElementById('chatBox').innerHTML = '';
+    }
+
+    function toggleEdit() {
+      if (!isEditing) {
+        document.querySelector('button').innerText = 'Save';
+
+        ['name', 'password', 'birth', 'address'].forEach(id => {
+          const span = document.getElementById(id);
+          const value = span.innerText;
+          span.innerHTML = `<input class="input-field" type="text" value="${value}" />`;
+        });
+
+        document.getElementById("profilePic").style.cursor = "pointer";
+        document.getElementById("profilePic").onclick = () => {
+          document.getElementById("imageInput").click();
+        };
+
+        isEditing = true;
+      } else {
+        document.querySelector('button').innerText = 'Edit';
+
+        ['name', 'password', 'birth', 'address'].forEach(id => {
+          const input = document.querySelector(`#${id} input`);
+          const value = input.value;
+          document.getElementById(id).innerText = value;
+        });
+
+        document.getElementById("profilePic").style.cursor = "default";
+        document.getElementById("profilePic").onclick = null;
+
+        isEditing = false;
+      }
+    }
+
+    function changePicture(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById("profilePic").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+</body>
+</html>

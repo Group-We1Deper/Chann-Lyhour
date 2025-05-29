@@ -1,0 +1,87 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fb;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.login-box,
+.chat-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 350px;
+}
+
+.input-group,
+.input-row {
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-group input,
+.input-row input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 8px 10px;
+  background-color: #1e53f1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 1rem;
+}
+
+.nav-tabs button {
+  padding: 10px;
+  border: none;
+  border-radius: 0;
+  background: #3b5f72;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.nav-tabs .active {
+  background: #093c52;
+}
+
+.chat-box {
+  min-height: 200px;
+  margin-bottom: 1rem;
+}
+
+.bubble {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: white;
+  margin: 4px 0; 
+}
+
+.bubble.left {
+  background-color: #00a3b8;
+}
+
+.bubble.right {
+  background-color: #f62b7f;
+  margin-left: auto;
+}
